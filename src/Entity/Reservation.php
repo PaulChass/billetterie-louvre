@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,61 +15,99 @@ class Reservation
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservationId", orphanRemoval=true)
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateTime;
+    private $reservationDate;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="datetime")
      */
-    private $amountOfTickets;
+    private $createdAd;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPaidFor;
+    private $isPaid;
+
+
+    public function __construct()
+    {
+        $this->tickets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDateTime(): ?\DateTimeInterface
+    public function getReservationDate(): ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->reservationDate;
     }
 
-    public function setDateTime(\DateTimeInterface $dateTime): self
+    public function setReservationDate(\DateTimeInterface $reservationDate): self
     {
-        $this->dateTime = $dateTime;
+        $this->reservationDate = $reservationDate;
 
         return $this;
     }
 
-    public function getAmountOfTickets(): ?int
+    public function getCreatedAd(): ?\DateTimeInterface
     {
-        return $this->amountOfTickets;
+        return $this->createdAd;
     }
 
-    public function setAmountOfTickets(int $amountOfTickets): self
+    public function setCreatedAd(\DateTimeInterface $createdAd): self
     {
-        $this->amountOfTickets = $amountOfTickets;
+        $this->createdAd = $createdAd;
 
         return $this;
     }
 
-    public function getIsPaidFor(): ?bool
+    public function getIsPaid(): ?bool
     {
-        return $this->isPaidFor;
+        return $this->isPaid;
     }
 
-    public function setIsPaidFor(bool $isPaidFor): self
+    public function setIsPaid(bool $isPaid): self
     {
-        $this->isPaidFor = $isPaidFor;
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setReservationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->contains($ticket)) {
+            $this->tickets->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getReservationId() === $this) {
+                $ticket->setReservationId(null);
+            }
+        }
 
         return $this;
     }
