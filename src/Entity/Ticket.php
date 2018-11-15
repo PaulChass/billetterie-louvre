@@ -17,11 +17,6 @@ class Ticket
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $reservationId;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
@@ -37,35 +32,23 @@ class Ticket
     private $country;
 
     /**
-     * @ORM\Column(type="date_immutable")
-     */
-    private $dayOfBirth;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $emailAddress;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
+
+    /**
      * @ORM\Column(type="float")
      */
-    private $Price;
+    private $price;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getReservationId(): ?int
-    {
-        return $this->reservationId;
-    }
-
-    public function setReservationId(int $reservationId): self
-    {
-        $this->reservationId = $reservationId;
-
-        return $this;
     }
 
     public function getFirstName(): ?string
@@ -104,18 +87,6 @@ class Ticket
         return $this;
     }
 
-    public function getDayOfBirth(): ?\DateTimeImmutable
-    {
-        return $this->dayOfBirth;
-    }
-
-    public function setDayOfBirth(\DateTimeImmutable $dayOfBirth): self
-    {
-        $this->dayOfBirth = $dayOfBirth;
-
-        return $this;
-    }
-
     public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
@@ -128,14 +99,26 @@ class Ticket
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getType(): ?int
     {
-        return $this->Price;
+        return $this->type;
     }
 
-    public function setPrice(float $Price): self
+    public function setType(int $type): self
     {
-        $this->Price = $Price;
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }
