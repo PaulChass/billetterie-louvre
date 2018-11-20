@@ -13,30 +13,27 @@ use App\Entity\Reservation;
 class TicketController extends AbstractController
 {
     /**
-     * @Route("/ticket", name="ticket")
+     * @Route("/", name="home")
      */
     public function index()
     {
-        return $this->render('ticket/index.html.twig', [
-            'controller_name' => 'TicketController',
-        ]);
+        return $this->render('ticket/home.html.twig');
     }
 
     /**
-     * @Route("/", name="home")
+     * @Route("/reservation", name="reservation")
      */
     public function homepage(Request $request, ObjectManager $manager)
     {
         $Reservation = new Reservation();
 
         $form = $this->createFormBuilder($Reservation)
-                     ->add('dateTime')
-                     ->add('amountOfTickets')
+                     ->add('reservationDate')
                      ->add('Envoyer',SubmitType::class )
                      ->getForm();
 
 
-        return $this->render('ticket/home.html.twig', ['form'=>$form->createView()
+        return $this->render('ticket/reservation.html.twig', ['form'=>$form->createView()
         ]);
     }
 
