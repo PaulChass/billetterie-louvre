@@ -6,13 +6,17 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    h1,h2{color :rgba(350,140,10,0.5);margin:1.5rem;}
-    .btn {margin:1.5rem;}
+    h1{color :rgba(320,120,10,0.8);margin:1.5rem;font-size:2rem;text-align:center;}
+    h2,h3{color :rgba(350,140,10,0.8);size:1.7rem;;}
+    
+    .btn {margin:2rem;font-size:1.2rem;padding:0.5rem;}
+    .box {border: 1px solid blue;margin:1rem;text-align:center;color:blue;background-color :rgba(350,140,10,0.4);border-radius:3%;}
+    small{size:0.7rem;font-style:italic;}
 </style>
 <h1> Commandez votre billet pour le musée du Louvre ! </h1>
 <section> 
     <div class="p-3"> 
-        <h3> </h3>
+        <h3> Horaires d'ouverture :</h3>
         <ul><Strong> Ouvert :</Strong>
             <li>  Du mercredi au lundi de 9h à 18h. </li>
         </ul>
@@ -24,15 +28,16 @@
     
     </div>
 </section>
-<section> <h2 class="p-3"> Tarifs : </h2>
-<div class="row">
-    <div class="col-6 col-md-3"> Billet adulte </br> 12€ </div>
-    <div class="col-6 col-md-3"> Billet adulte </br> 12€ </div>
-    <div class="col-6 col-md-3"> Billet adulte </br> 12€ </div>
-    <div class="col-6 col-md-3"> Billet adulte </br> 12€ </div>
+<section> <h3 class="p-3"> Tarifs : </h2>
+<div class="alert-info row justify-content-around">
+    <div class="box col-5 col-md-2"> Billet enfant <small>( 4 à 12 ans )</small> </br> 8€ </div>
+    <div class="box col-5 col-md-2"> Billet normal </br> 16€ </div>
+    <div class="box col-5 col-md-2"> Billet senior<small> ( à partir de 60 ans ) </small> </br> 12€ </div>
+    <div class="box col-5 col-md-2"> Billet réduit </br> 10€ </div>
 </div>
 </section>
 <div class="row justify-content-center p-3">
-<a href="/reservation"> Je commande </a>
+ <a href="/reservation"><button class="btn btn-primary"> Je commande </button></a>
+
 </div>
 {% endblock %}

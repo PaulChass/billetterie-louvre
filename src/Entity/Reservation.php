@@ -34,10 +34,16 @@ class Reservation
      */
     private $isPaid;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservation", orphanRemoval=true)
+     */
+    private $Tickets;
+
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->Tickets = new ArrayCollection();
     }
 
     public function getId(): ?int
