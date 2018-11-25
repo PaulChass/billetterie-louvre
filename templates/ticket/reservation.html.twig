@@ -3,15 +3,21 @@
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-<style>     h1{color :rgba(320,120,10,0.8);margin:1.5rem;size:2rem;text-align:center;}
-    h2,h3{color :rgba(350,140,10,0.5);margin:0.5rem;size:1.7rem;}
-    </style>
-<h1> Choisissez la date de votre visite ! </h1>
 
+<h1> Etape 1 : Choisissez la date de votre visite ! </h1>
+
+<div class="">
 {{ form_start(form) }}
-
+<h2>
 {{ form_row(form.reservationDate, {'label':"Date de la visite"}) }}
 
-{{ form_row(form.Envoyer)}}
+<!--<p>
+Nombre de ticket(s) </p>
+<p>
+<input type="number" name="number" placeholder="0" min="1" required> </input> </p>
 
+-->
+<button type="submit" class="btn btn-primary"> Suivant </button>
+
+</div>
 {% endblock %}
