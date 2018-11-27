@@ -1,0 +1,25 @@
+{
+  "name": "billetterie-louvre",
+  "version": "1.0.0",
+  "description": "\"# billetterie-louvre\"  git init git add README.md git commit -m \"first commit\" git remote add origin https://github.com/PaulChass/billetterie-louvre.git git push -u origin master\r \"# billetterie-louvre\"",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulChass/billetterie-louvre.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulChass/billetterie-louvre/issues"
+  },
+  "homepage": "https://github.com/PaulChass/billetterie-louvre#readme",
+  "dependencies": {
+    "flatpickr": "^4.5.2"
+  }
+}

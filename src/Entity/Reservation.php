@@ -27,7 +27,7 @@ class Reservation
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAd;
+    private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -41,7 +41,7 @@ class Reservation
 
 
     public function __construct()
-    {
+    {   
         $this->tickets = new ArrayCollection();
         $this->Tickets = new ArrayCollection();
     }
@@ -63,14 +63,14 @@ class Reservation
         return $this;
     }
 
-    public function getCreatedAd(): ?\DateTimeInterface
+    public function getcreatedAt(): ?\DateTimeInterface
     {
-        return $this->createdAd;
+        return $this->createdAt;
     }
 
-    public function setCreatedAd(\DateTimeInterface $createdAd): self
+    public function setcreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->createdAd = $createdAd;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -104,7 +104,12 @@ class Reservation
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->id.'';
+    }
 
+      
     public function removeTicket(Ticket $ticket): self
     {
         if ($this->tickets->contains($ticket)) {

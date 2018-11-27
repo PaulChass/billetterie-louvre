@@ -52,6 +52,11 @@ class Ticket
      */
     private $reservation;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $birthDay;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,4 +145,22 @@ class Ticket
 
         return $this;
     }
+    
+    public function getReservations()
+    {
+        return $this->reservations;
+    }
+
+    public function getBirthDay(): ?\DateTimeInterface
+    {
+        return $this->birthDay;
+    }
+
+    public function setBirthDay(\DateTimeInterface $birthDay): self
+    {
+        $this->birthDay = $birthDay;
+
+        return $this;
+    }
+
 }

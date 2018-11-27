@@ -1,12 +1,33 @@
 {% extends 'base.html.twig' %}
-{% block title %}Hello {% endblock %}
+{% block title %}Hello      {% endblock %}
 
 {% block body %}
-<h1> Etape 2 : Saisissez vos données personnelles   </h1>
-
-<h2> Billet 1 : </h2> 
 
 
-<button class="btn btn-primary"> Ajouter un 2 ème billet </button>
+    <h1 class="text-primary">Choisissez la date de votre visite </h1>
+
+    {# render the task's only field: description #}
+
+    
+    <ul class="reservations">
+
+    {{ form_start(form) }}
+        {# iterate over each existing reservation and render its only field: name #}
+        {# for ticket in form.tickets #}
+        {{$(".selector").flatpickr(optional_config)}}
+        {{ form_row(form.reservationDate) }}
+        {# endfor #}
+        {{ form_row(form.tickets.0.firstName)}}
+        {{ form_row(form.tickets.0.lastName)}}
+        {{ form_row(form.tickets.0.country)}}
+        {{ form_row(form.tickets.0.birthday)}}
+        {{ form_row(form.tickets.0.type) }}
+
+        <button class="btn btn-primary"> Ajouter un 2 ème billet </button>
 <button class="btn btn-success"> Récapitulatif et paiement </button>
+    </ul>
+    
+
+
+
 {% endblock %}

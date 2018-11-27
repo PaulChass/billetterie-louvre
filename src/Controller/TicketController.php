@@ -6,9 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Reservation;
+use App\Form\ReservationFormType;
+use App\Entity\Ticket;
+
+
 
 class TicketController extends AbstractController
 {
@@ -21,17 +23,38 @@ class TicketController extends AbstractController
     }
 
     
-    /**
-     * @Route("/billet", name="billet")
-     */
-    public function billetPage()
-    {
-        return $this->render('ticket/ticket.html.twig');
-    }
-
+    
     /**
      * @Route("/reservation", name="reservation")
      */
+    
+    public function new(Request $request, ObjectManager $manager)
+    {
+        $reservation = new reservation();
+
+        $ticket1 = new Ticket();
+        $ticket1 -> setFirstName('Kareem');
+        $reservation->getTickets()->add($ticket1);
+        $ticket2 = new Ticket();
+        $ticket2 -> setFirstName('Shaq');
+        $reservation ->setCreatedAt(new \Datetime() );
+        $reservation->getTickets()->add($ticket2);
+        
+        $form = $this->createForm(ReservationFormType::class, $reservation);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($ticket1);
+            $manager->flush();
+            // ... maybe do some form processing, like saving the Ticket and Reservation objects
+        }
+
+        return $this->render('ticket/ticket.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+    /*
     public function reservationPage(Request $request, ObjectManager $manager)
     {
         $Reservation = new Reservation();
@@ -48,13 +71,27 @@ class TicketController extends AbstractController
             $manager->persist($Reservation);
             $manager->flush();
            
-            return $this->redirectToRoute('/billet'); 
+            return $this->redirectToRoute('billet'); 
         }   
         elseif($form->isSubmitted())
         {
-            return $this->billetPage();
+            return $this->redirectToRoute('billet'); 
         }
         return $this->render('ticket/reservation.html.twig', ['form'=>$form->createView()
         ]);
     }
+    /*
+
+    /**
+     * @Route("/billet", name="billet")
+     */
+    public function billetPage()
+    {
+        $ticket = new Ticket();
+        $form = $this->createForm(TicketFormType::class,$ticket);
+        
+
+        return $this->render('ticket/ticket.html.twig');
+    }
+
 }
