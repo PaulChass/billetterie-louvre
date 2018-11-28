@@ -16,6 +16,7 @@ class ReservationFormType extends AbstractType
             ->add('reservationDate')
             ->add('createdAt')
             ->add('isPaid')
+            
         ;
 
         $builder->add('tickets', CollectionType::class, array(

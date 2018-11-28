@@ -14,8 +14,8 @@
     {{ form_start(form) }}
         {# iterate over each existing reservation and render its only field: name #}
         {# for ticket in form.tickets #}
-        {{$(".selector").flatpickr(optional_config)}}
         {{ form_row(form.reservationDate) }}
+         <p class="flatpickr fp" id="myID"><input class="flatpickr selector flatpickr-input active" id="myID" type="text" placeholder="Select Date.." readonly="readonly"></p>
         {# endfor #}
         {{ form_row(form.tickets.0.firstName)}}
         {{ form_row(form.tickets.0.lastName)}}
