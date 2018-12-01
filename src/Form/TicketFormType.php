@@ -19,9 +19,8 @@ class TicketFormType extends AbstractType
             ->add('birthday', DateType::class, ['widget' => 'choice'])
             ->add('country')
             ->add('emailAddress')
-            ->add('type', CheckBoxType::class,['label'=>'Tarif Réduit ( un justificatif vous sera demandé) '])
+            ->add('type')
             ->add('price')
-            ->add('reservation')
             
         ;
     }

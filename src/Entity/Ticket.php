@@ -145,11 +145,6 @@ class Ticket
 
         return $this;
     }
-    
-    public function getReservations()
-    {
-        return $this->reservations;
-    }
 
     public function getBirthDay(): ?\DateTimeInterface
     {

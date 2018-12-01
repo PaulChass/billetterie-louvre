@@ -22,8 +22,11 @@ class ReservationFormType extends AbstractType
         $builder->add('tickets', CollectionType::class, array(
             'entry_type' => TicketFormType::class,
             'entry_options' => array('label' => false),
+            'allow_add' => true,
         ));
     }
+
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

@@ -8,26 +8,20 @@
 
     {# render the task's only field: description #}
 
-    
-    <ul class="reservations">
+  
+{{ form_start(form) }}
+    {# render the task's only field: description #}
+<h3> Choisissez la date de votre visite </h3>
 
-    {{ form_start(form) }}
-        {# iterate over each existing reservation and render its only field: name #}
-        {# for ticket in form.tickets #}
-        {{ form_row(form.reservationDate) }}
-         <p class="flatpickr fp" id="myID"><input class="flatpickr selector flatpickr-input active" id="myID" type="text" placeholder="Select Date.." readonly="readonly"></p>
+    
+    
+    {{ form_widget(form.reservationDate) }}
+    <h3>Tickets</h3>
+    <ul class="tickets" data-prototype="{{ form_widget(form.tickets.vars.prototype.firstName)|e('html_attr') }}"></ul>
+   
+    
+        {# iterate over each existing ticket and render its only field: name #}
+        {# for ticket in tickets#}
+
         {# endfor #}
-        {{ form_row(form.tickets.0.firstName)}}
-        {{ form_row(form.tickets.0.lastName)}}
-        {{ form_row(form.tickets.0.country)}}
-        {{ form_row(form.tickets.0.birthday)}}
-        {{ form_row(form.tickets.0.type) }}
-
-        <button class="btn btn-primary"> Ajouter un 2 ème billet </button>
-<button class="btn btn-success"> Récapitulatif et paiement </button>
-    </ul>
-    
-
-
-
 {% endblock %}

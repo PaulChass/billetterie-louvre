@@ -32,21 +32,16 @@ class TicketController extends AbstractController
     {
         $reservation = new reservation();
 
-        $ticket1 = new Ticket();
-        $ticket1 -> setFirstName('Kareem');
-        $reservation->getTickets()->add($ticket1);
-        $ticket2 = new Ticket();
-        $ticket2 -> setFirstName('Shaq');
-        $reservation ->setCreatedAt(new \Datetime() );
-        $reservation->getTickets()->add($ticket2);
-        
         $form = $this->createForm(ReservationFormType::class, $reservation);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->persist($ticket1);
+           
+            $manager->persist($reservation);
             $manager->flush();
+           
+            
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
 
