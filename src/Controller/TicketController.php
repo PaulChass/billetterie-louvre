@@ -36,13 +36,14 @@ class TicketController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-           dump($request);die;
+            $reservation->addTickets();
             $manager->persist($reservation);
             $manager->flush();
-           
+            Echo "Quinte flush"; 
             
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
+        echo "nope";
         return $this->render('ticket/ticket.html.twig', array(
             'form' => $form->createView(),
         ));

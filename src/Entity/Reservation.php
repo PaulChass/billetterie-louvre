@@ -46,6 +46,7 @@ class Reservation
     {   
         $this->tickets = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->isPaid = false;
     }
 
     public function getId(): ?int

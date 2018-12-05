@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Reservation;
 use App\Entity\Ticket;
 use App\Form\TicketFormType;
+use App\Form\FlatpickrType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +16,7 @@ class ReservationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reservationDate')
+            ->add('reservationDate', FlatpickrType::class)
         ;
 
         $builder->add('tickets', CollectionType::class, array(
