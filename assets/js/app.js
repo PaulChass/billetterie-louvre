@@ -19,7 +19,7 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 var $collectionHolder;
 
 // setup an "add a ticket" link
-var $addTicketButton = $('<button type="button" class="add_ticket_link">Ajouter un ticket</button>');
+var $addTicketButton = $('<button type="button" class="add_ticket_link btn">Ajouter un ticket</button>');
 var $newLinkLi = $('<li></li>').append($addTicketButton);
 
 $(document).ready(function() {
@@ -37,6 +37,7 @@ $(document).ready(function() {
         // add a new tag form (see next code block)
         addTicketForm($collectionHolder, $newLinkLi);
     });
+});
 
     function addTicketForm($collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
@@ -45,15 +46,9 @@ $(document).ready(function() {
     // get the new index
     var index = $collectionHolder.data('index');
 
-    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-    // Replace '__name__label__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    // newForm = newForm.replace(/__name__label__/g, index);
-
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
+    var newForm = prototype;
+   
     newForm = newForm.replace(/__name__/g, index);
-
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
@@ -61,4 +56,3 @@ $(document).ready(function() {
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.before($newFormLi);
 }
-});

@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Reservation;
+use App\Entity\Ticket;
+use App\Form\TicketFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,9 +16,6 @@ class ReservationFormType extends AbstractType
     {
         $builder
             ->add('reservationDate')
-            ->add('createdAt')
-            ->add('isPaid')
-            
         ;
 
         $builder->add('tickets', CollectionType::class, array(

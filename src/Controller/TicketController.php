@@ -31,20 +31,18 @@ class TicketController extends AbstractController
     public function new(Request $request, ObjectManager $manager)
     {
         $reservation = new reservation();
-
+        
         $form = $this->createForm(ReservationFormType::class, $reservation);
-
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-           
+           dump($request);die;
             $manager->persist($reservation);
             $manager->flush();
            
             
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
-
         return $this->render('ticket/ticket.html.twig', array(
             'form' => $form->createView(),
         ));

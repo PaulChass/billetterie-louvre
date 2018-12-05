@@ -2,3 +2,7 @@
         h1{margin:1.5rem;font-size:2rem;text-align:center;}
         h2,h3{color :black;;size:1.7rem;;}
         section{margin:1.5rem;color:black;}
+        
+ 
+    .box {height:5rem;border: 1px solid blue;margin:1rem;text-align:justify;color:white;background-color:rgba(130, 170, 250,1);border-radius:3%;}
+    small{size:0.7rem;font-style:italic;}

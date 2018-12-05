@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
+ * @ORM\Table(name="Reservation")
+ * @ORM\HasLifecycleCallbacks
  */
 class Reservation
 {
@@ -20,7 +22,7 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime" ,nullable= true)
      */
     private $reservationDate;
 
@@ -37,13 +39,13 @@ class Reservation
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservation", orphanRemoval=true)
      */
-    private $Tickets;
+    private $tickets;
 
 
     public function __construct()
     {   
         $this->tickets = new ArrayCollection();
-        $this->Tickets = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
