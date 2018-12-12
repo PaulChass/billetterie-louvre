@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ReservationFormType extends AbstractType
 {
@@ -17,6 +18,7 @@ class ReservationFormType extends AbstractType
     {
         $builder
             ->add('reservationDate', FlatpickrType::class)
+            ->add('Recap & Paiement', SubmitType::class)
         ;
 
         $builder->add('tickets', CollectionType::class, array(

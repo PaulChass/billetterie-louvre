@@ -9,6 +9,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Entity\Ticket;
+use App\Service\Calculator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 
 
@@ -28,28 +30,44 @@ class TicketController extends AbstractController
      * @Route("/reservation", name="reservation")
      */
     
-    public function new(Request $request, ObjectManager $manager)
+    public function new(Request $request, ObjectManager $manager, Calculator $calculator)
     {
         $reservation = new reservation();
+        $originalTickets = new ArrayCollection();
         
         $form = $this->createForm(ReservationFormType::class, $reservation);
         $form->handleRequest($request);
-        
+        foreach ($reservation->getTickets() as $ticket) {
+            $originalTickets->add($ticket);
+        }
+       
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $reservation->addTickets();
-            $manager->persist($reservation);
-            $manager->flush();
-            Echo "Quinte flush"; 
+            foreach ($originalTickets as $ticket) {
+                $checkbox = $ticket->getType();
+                $birthday = $ticket->getBirthday();
+                $time = $reservation->getReservationDate();
+                $type = $calculator -> calculateType($checkbox,$birthday,$time);
+                $ticket->setType($type);
+                $price = $calculator -> calculatePrice($type);
+                $ticket->setPrice($price);
+                $manager->persist($ticket); 
+                $ticket->setReservation($reservation); 
+            }
+            $manager->persist($reservation);  
+            $manager->flush(); 
             
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
-        echo "nope";
         return $this->render('ticket/ticket.html.twig', array(
             'form' => $form->createView(),
         ));
-    }
+    
+
+    // render some form template
+}
     /*
-    public function reservationPage(Request $request, ObjectManager $manager)
+    public function reservationPage(Request $requestdie;, ObjectManager $manager)
     {
         $Reservation = new Reservation();
 

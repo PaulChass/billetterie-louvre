@@ -37,7 +37,7 @@ class Reservation
     private $isPaid;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservation", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservation", orphanRemoval=true, cascade={"persist"})
      */
     private $tickets;
 
@@ -98,15 +98,17 @@ class Reservation
         return $this->tickets;
     }
 
-    public function addTicket(Ticket $ticket): self
+    public function addTicket(Ticket $ticket)
     {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
-            $ticket->setReservationId($this);
-        }
-
-        return $this;
+        $ticket->setReservation($this);
+        $this->tickets->add($ticket);
     }
+
+    public function removeTag(Tag $tag)
+    {
+        // ...
+    }
+    
     public function __toString()
     {
         return $this->id.'';
@@ -125,4 +127,5 @@ class Reservation
 
         return $this;
     }
+
 }

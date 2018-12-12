@@ -7,21 +7,53 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\CheckBoxType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 
 class TicketFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('birthday',  BirthdayType::class, ['widget' => 'choice'])
-            ->add('country')
-            ->add('emailAddress', EmailType::class)
-            //->add('type')
-            //->add('price')
+            ->add('firstName',TextType::class,[
+                'attr'=> [
+                    'placeholder'=>'Votre Prénom',
+                    'autocomplete' => 'on'
+                ], 'label'=>'Prénom'
+            ])
+
+            ->add('lastName',TextType::class,[
+                'attr'=> [
+                    'placeholder'=>'Nom',
+                    'autocomplete' => 'on'
+                ], 'label'=>'Nom de famille'
+            ])
+
+            ->add('birthday',  BirthdayType::class,  [
+                'widget' => 'choice',
+                'label'=>'Date de naissance',
+            ])
+
+            ->add('country', CountryType::class, [
+                'placeholder' => 'France',
+                'label'=>'Pays'
+            ])
+            
+            ->add('emailAddress', EmailType::class, [
+                'attr'=> [
+                'placeholder' => 'exemple@mail.com',
+                'autocomplete' => 'on'
+                ],
+                'label' => 'Adresse mail'
+            ])
+                
+            ->add('type',CheckboxType::class,[
+                'required'=>false,
+                'label'=>'Tarif réduit ( Un justificatif sera demandé) '
+            ])
         ;
     }
 

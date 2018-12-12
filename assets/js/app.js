@@ -10,7 +10,20 @@ require('../css/app.css');
 
 // commonjs
 const flatpickr = require("flatpickr");
-flatpickr('#reservation_form_reservationDate', {});
+flatpickr('#reservation_form_reservationDate', { 
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+    "disable": [
+        function(date) {
+            // return true to disable
+            return (date.getDay() === 2 || date.getDay() === 7);
+        }
+    ],
+    "locale": {
+        "firstDayOfWeek": 1 // start week on Monday
+    }
+});
 
 var $ = require('jquery');
 
