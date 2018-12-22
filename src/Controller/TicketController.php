@@ -9,10 +9,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Entity\Ticket;
-use App\Service\Calculator;
+use App\Service\TicketTypeManager;
 use Doctrine\Common\Collections\ArrayCollection;
-
-
+use App\Repository\ReservationRepository;
+use App\Repository\TicketRepository;
 
 class TicketController extends AbstractController
 {
@@ -25,12 +25,10 @@ class TicketController extends AbstractController
     }
 
     
-    
     /**
      * @Route("/reservation", name="reservation")
-     */
-    
-    public function new(Request $request, ObjectManager $manager, Calculator $calculator)
+     */    
+    public function new(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager)
     {
         $reservation = new reservation();
         $originalTickets = new ArrayCollection();
@@ -44,66 +42,50 @@ class TicketController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($originalTickets as $ticket) {
-                $checkbox = $ticket->getType();
-                $birthday = $ticket->getBirthday();
-                $time = $reservation->getReservationDate();
-                $type = $calculator -> calculateType($checkbox,$birthday,$time);
+                $type = $ticketTypeManager -> calculateType(
+                    $ticket->getType(),
+                    $ticket->getBirthday(),
+                    $reservation->getReservationDate()
+                );
                 $ticket->setType($type);
-                $price = $calculator -> calculatePrice($type);
+                $price = $ticketTypeManager -> calculatePrice($type);
                 $ticket->setPrice($price);
                 $manager->persist($ticket); 
                 $ticket->setReservation($reservation); 
             }
             $manager->persist($reservation);  
             $manager->flush(); 
+            return $this->redirectToRoute('recap', ['id' => $reservation->getId()]);
+            
             
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
         return $this->render('ticket/ticket.html.twig', array(
             'form' => $form->createView(),
         ));
-    
-
-    // render some form template
-}
-    /*
-    public function reservationPage(Request $requestdie;, ObjectManager $manager)
-    {
-        $Reservation = new Reservation();
-
-        $form = $this->createFormBuilder($Reservation)
-                     ->add('reservationDate')
-                     ->getForm();
-
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $Reservation->setCreatedAt(new \DateTime());
-
-            $manager->persist($Reservation);
-            $manager->flush();
-           
-            return $this->redirectToRoute('billet'); 
-        }   
-        elseif($form->isSubmitted())
-        {
-            return $this->redirectToRoute('billet'); 
-        }
-        return $this->render('ticket/reservation.html.twig', ['form'=>$form->createView()
-        ]);
     }
-    /*
 
     /**
-     * @Route("/billet", name="billet")
+     * @Route("/recap/{id}", name="recap")
      */
-    public function billetPage()
-    {
-        $ticket = new Ticket();
-        $form = $this->createForm(TicketFormType::class,$ticket);
-        
-
-        return $this->render('ticket/ticket.html.twig');
+    public function recap($id, ReservationRepository $reservationRepository, TicketRepository $ticketRepository, TicketTypeManager $ticketTypeManager) {
+        $reservation = $reservationRepository->find($id);
+        $tickets = $ticketRepository->findByReservation($reservation);
+        $totalPrice=0;
+        $amountOfTickets=0;
+        foreach($tickets as $ticket)
+        {
+        $typeName = $ticketTypeManager -> nameType($ticket->getType());
+        $totalPrice=$totalPrice + $ticket->getPrice();
+        $amountOfTickets++;
+        }
+        $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation->getReservationDate());
+        return $this->render('ticket/recapitulatif.html.twig', array(
+            'reservation'=>$reservation,
+            'typeName'=>$typeName, 
+            'dayOrHalfDay'=>$dayOrHalfDay, 
+            'totalPrice'=>$totalPrice,
+            'amountOfTickets' => $amountOfTickets )
+        );
     }
-
 }

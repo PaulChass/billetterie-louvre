@@ -7,10 +7,10 @@
 <section> 
     <div class="p-3"> 
         <h3> Horaires d'ouverture :</h3>
-        <ul><Strong> Ouvert :</Strong>
+        <ul><span class="bold" > Ouvert :</span>
             <li>  Du mercredi au lundi de 9h à 18h. </li>
         </ul>
-        <ul> <Strong>Fermé : </Strong> 
+        <ul> <span class="bold" >Fermé : </span> 
             <li> Le mardi. </li>
             <li> 1er janvier, le 1er mai et le 25 décembre </li>
         </ul>
@@ -18,16 +18,73 @@
     
     </div>
 </section>
-<section> <h3 class="p-3"> Tarifs : </h2>
-<div class="alert-info row justify-content-around">
-    <div class="box col-5 col-md-4"> Tarif enfant <small>( 4 à 12 ans )</small> </br> 8€ </div>
-    <div class="box col-5 col-md-4"> Tarif normal </br> 16€ </div>
-    <div class="box col-5 col-md-4"> Tarif senior<small> ( à partir de 60 ans ) </small> </br> 12€ </div>
-    <div class="box col-5 col-md-4"> Tarif réduit </br> 10€ </div>
+<section class="bloc">
+ <h3 class="p-3"> Tarifs : </h2>
+    <div class="row justify-content-around">
+    
+    <div class="box col-5 col-md-4 column">
+     <div class="col-sm">
+       <span class="bold">  Tarif enfant </span>
+       <span class="small">( 4 à 12 ans )</span> 
+     </div>
+     <div class="col-sm">
+       <span class="small">  Journée complète: </span>
+       <span class="align-right" > 8€ </span> 
+      </div>
+      <div class="col-sm"> 
+       <span class="small">  Demi journée : </span>
+       <span class="align-right" > 4€ </span> 
+      </div> 
+    </div>
+         
+    <div class="box col-5 col-md-4 column">
+     <div class="col-sm">
+       <span class="bold">  Tarif Normal </span>
+       <span class="small">( 13 à 60 ans )</span> 
+     </div>
+     <div class="col-sm">
+       <span class="small">  Journée complète: </span>
+       <span class="align-right" > 8€ </span> 
+      </div>
+      <div class="col-sm"> 
+       <span class="small">  Demi journée : </span>
+       <span class="align-right" > 4€ </span> 
+      </div> 
+    </div>
+         
+     <div class="box col-5 col-md-4 column">
+        <div class="col-sm">
+        <span class="bold">  Tarif Senior </span>
+        <span class="small">( + de 60 ans )</span> 
+        </div>
+        <div class="col-sm">
+        <span class="small">  Journée complète: </span>
+        <span class="align-right" > 12€ </span> 
+        </div>
+        <div class="col-sm"> 
+        <span class="small">  Demi journée : </span>
+        <span class="align-right" > 6€ </span> 
+        </div> 
+    </div>
+
+     <div class="box col-5 col-md-4 column">
+        <div class="col-sm">
+        <span class="bold">  Tarif Réduit</span>
+        <span class="small"></span> 
+        </div>
+        <div class="col-sm">
+        <span class="small">  Journée complète: </span>
+        <span class="align-right" > 10€ </span> 
+        </div>
+        <div class="col-sm"> 
+        <span class="small">  Demi journée : </span>
+        <span class="align-right" > 5€ </span> 
+        </div> 
+    </div>
 </div>
 </section>
 <div class="row justify-content-center p-3">
- <a href="/reservation"><button class="btn btn-lg btn-primary"> Je commande </button></a>
+<a href="/reservation"><button class="btn btn-lg btn-primary"> Je commande </button></a>
 
 </div>
 {% endblock %}

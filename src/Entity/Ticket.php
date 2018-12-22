@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+    const CHILD = 1;
+    const NORMAL= 2;
+    const SENIOR = 3;
+    const REDUCED = 4;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

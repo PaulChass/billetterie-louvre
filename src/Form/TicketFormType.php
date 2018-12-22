@@ -35,6 +35,7 @@ class TicketFormType extends AbstractType
             ->add('birthday',  BirthdayType::class,  [
                 'widget' => 'choice',
                 'label'=>'Date de naissance',
+                'format' => 'dd-MM-yyyy',
             ])
 
             ->add('country', CountryType::class, [

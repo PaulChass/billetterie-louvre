@@ -1,8 +1,51 @@
-  body{background-color:rgba(150, 200, 250,0.7);color:white;}
+  body{background-color:rgba(150, 200, 250,0.7);font-size:1.2rem;}
         h1{margin:1.5rem;font-size:2rem;text-align:center;}
         h2,h3{color :black;;size:1.7rem;;}
         section{margin:1.5rem;color:black;}
-        
- 
-    .box {height:5rem;border: 1px solid blue;margin:1rem;text-align:justify;color:white;background-color:rgba(130, 170, 250,1);border-radius:3%;}
-    small{size:0.7rem;font-style:italic;}
+    .bold{font-weight: bold;}
+    .align-right{text-align: right;padding-left:5px;}
+    .box {
+      padding:15px;
+      border: 1px solid blue;
+      border-radius:3%;
+      margin:1rem;color:black;
+      background-color:rgba(130, 200, 200,0.6);
+
+    }
+
+
+   
+    #blocImage p {
+      width: 100%;
+      margin : auto;
+      top:5%;
+      z-index: 200;
+      text-align: center; 
+      color:white;
+      font-size:3rem;
+    position: absolute;}
+
+      #blocImage {
+        position: relative;
+        width : 100%;
+    }
+    .small{size:0.7rem;font-style:italic;}
+
+    .bloc {
+      background-color:rgb(255,255,255,0.5); 
+      border: 2px solid blue; 
+      border-radius:5px;margin:5%;padding: 2%;
+
+
+    }
+    
+
+
+
+
+
+ @media(max-width:768px){
+      #blocImage p {
+        font-size:1.5rem;
+    }
+  }

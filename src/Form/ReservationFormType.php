@@ -17,7 +17,7 @@ class ReservationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reservationDate', FlatpickrType::class)
+            ->add('reservationDate', FlatpickrType::class , ['label'=>'Date de Reservation'] )
             ->add('Recap & Paiement', SubmitType::class)
         ;
 

@@ -32,12 +32,13 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 var $collectionHolder;
 
 // setup an "add a ticket" link
-var $addTicketButton = $('<button type="button" class="add_ticket_link btn">Ajouter un ticket</button>');
-var $newLinkLi = $('<li></li>').append($addTicketButton);
+var $addTicketButton = $('<button type="button" class="add_ticket_link btn btn-primary">Ajouter un ticket</button>');
+var $newLinkLi = $('<span></span>').append($addTicketButton);
 
 $(document).ready(function() {
+    console.log("coucou");
     // Get the ul that holds the collection of tags
-    $collectionHolder = $('ul.tickets');
+    $collectionHolder = $('div.tickets');
 
     // add the "add a tag" anchor and li to the tags ul
     $collectionHolder.append($newLinkLi);
@@ -66,6 +67,6 @@ $(document).ready(function() {
     $collectionHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
+    var $newFormLi = $('<span class="bloc"></span>').append(newForm);
     $newLinkLi.before($newFormLi);
 }

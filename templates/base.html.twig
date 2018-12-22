@@ -8,22 +8,23 @@
         {% block stylesheets %}
             {# 'app' must match the first argument to addEntry() in webpack.config.js #}
             {{ encore_entry_link_tags('app') }}
-                 <link rel="stylesheet" src="/build/app.css"> -->
+                 <link rel="stylesheet" src="/build/app.css">
         {% endblock %}
         <style>
       
         </style>
     </head>
     <body>
-    <header><img class="img-fluid" src="https://images.musement.com/cover/0002/15/venuehero-louvre-jpg_header-114422.png?&q=60&fit=crop"/> </header>
-    <div class="container col-12 col-md-6  ">
+    <header><div id="blocImage">
+    <img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Paris_06_2012_Louvre_Panorama_3036.jpg" alt="">
+ <p>Commandez votre billet pour le musée du louvre ! </p> </div>
+     </header>
+    <div class="container col-12 col-md-8  ">
         {% block body %}{% endblock %}
     </div>
     <footer class="box"> FOOTER </footer>
     </body>
    {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-                <script src="/build/runtime.js"></script>
-                <script src="/build/app.js"></script>
         {% endblock %}
 </html>
