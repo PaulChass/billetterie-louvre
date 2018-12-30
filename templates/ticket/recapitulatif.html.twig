@@ -6,12 +6,12 @@
 <h3> N° de reservation {{ reservation.id }} </h3>
 <h3> Visite le {{ reservation.reservationDate|date('d/m/Y') }} </h3>
 </h2>
-
+<div class="bloc">
     {% for ticket in reservation.tickets %}
         <h4>  Billet x<button class="btn"> Modifier </button>
                 <button class="btn"> Supprimer </button></h4>
         
-        <div class="row bloc">
+        <div class="row box">
             
             <div class="col-sm">
                 <div> Prénom  :  {{ ticket.firstName }}</div>
@@ -29,14 +29,26 @@
         </div>
 
     {% endfor %}
-    <div>
+</div>
+<div class="bloc">
     <h3> Total </h3>
-     <h4> Nombre de billets : {{amountOfTickets}} </h4>
-        
-        <h4> Prix total : {{totalPrice}}€</h4>
-       
+    <div class="box">
+        <h4> Nombre de billets : {{amountOfTickets}} </h4>
+        <h4> Prix total : {{totalPrice}}€</h4>   
+    </div>    
+    <div class="row justify-content-md-center"> 
+    <form action="/paiement" method="POST">
+    <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_KK2i0mkrYlpFPfBlE2n6CYEL"
+        data-amount={{totalPrice*100}}
+        data-name="Carte de paiement"
+        data-description={{totalPrice}} €
+        {#data-image="https://stripe.com/img/documentation/checkout/marketplace.png"#}
+        data-locale="auto"
+        data-currency="eur">
+    </script>
+    </form> 
     </div>
-    <div>
-    <button class="btn btn-success"> Paiement </button>
-    </div>
+</div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Flosch\Bundle\StripeBundle\Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,13 +74,13 @@ class TicketController extends AbstractController
         $tickets = $ticketRepository->findByReservation($reservation);
         $totalPrice=0;
         $amountOfTickets=0;
+        $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
         foreach($tickets as $ticket)
         {
         $typeName = $ticketTypeManager -> nameType($ticket->getType());
         $totalPrice=$totalPrice + $ticket->getPrice();
         $amountOfTickets++;
         }
-        $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation->getReservationDate());
         return $this->render('ticket/recapitulatif.html.twig', array(
             'reservation'=>$reservation,
             'typeName'=>$typeName, 
@@ -87,5 +88,20 @@ class TicketController extends AbstractController
             'totalPrice'=>$totalPrice,
             'amountOfTickets' => $amountOfTickets )
         );
+    }
+
+    /**
+     * @Route *("/paiement" , name="paiement")
+     */
+    public function paiement(){
+        $this->container->get('flosch.stripe.client');
+    $charge = \Stripe\Charge::create([
+        'amount' => '1200',
+        'currency' => 'eur',
+        'source' => 'tok_visa',
+        'receipt_email' => 'jenny.rosen@example.com',
+    ]);
+
+            return $this->render('ticket/confirmation.html.twig');
     }
 }

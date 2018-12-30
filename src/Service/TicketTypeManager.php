@@ -65,19 +65,34 @@ class TicketTypeManager
     public function nameType($type)
     {
         switch($type){
-            case 0 && 5 :
+            case 0  :
                 return 'Aucun';
                 break;
-            case 1 && 6 :
+            case 1  :
                 return 'Enfant';
                 break;
-            case 2 && 7 :
+            case 2 :
                 return 'Normal';
                 break ;
-            case 3 && 8 :
+            case 3  :
                 return "Senior";
                 break;
-            default :
+            case 4 :
+                return 'Réduit';
+                break;
+            case 5  :
+                return 'Aucun';
+                break;
+            case 6  :
+                return 'Enfant';
+                break;
+            case 7 :
+                return 'Normal';
+                break ;
+            case 8  :
+                return "Senior";
+                break;
+            case 9 :
                 return 'Réduit';
                 break;
         }

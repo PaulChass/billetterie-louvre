@@ -16,12 +16,16 @@
 {{ form_start(form) }}
     {{ form_row(form.reservationDate) }}
 
-    <h3>Tickets</h3>
-    <div class="tickets" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html') }}">
+    <h4>Tickets</h4>
+    <div class="bloc">
+    Ticket 
+    <div class="tickets  center" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html') }}">
     </div>
     
-    
+   </div>
+   <div class="row justify-content-md-center">
     <button class="btn btn-success" type="submit"> Envoyer </submit>
+    </div>
     {{ form_row(form._token) }}
 {{ form_end(form.reservationDate) }}
 

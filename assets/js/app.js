@@ -8,7 +8,7 @@
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
 
-// commonjs
+// Flatpickr
 const flatpickr = require("flatpickr");
 flatpickr('#reservation_form_reservationDate', { 
     enableTime: true,
@@ -25,15 +25,15 @@ flatpickr('#reservation_form_reservationDate', {
     }
 });
 
+// JQuery
 var $ = require('jquery');
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 var $collectionHolder;
 
 // setup an "add a ticket" link
-var $addTicketButton = $('<button type="button" class="add_ticket_link btn btn-primary">Ajouter un ticket</button>');
-var $newLinkLi = $('<span></span>').append($addTicketButton);
+var $addTicketButton = $('<button type="button" class="add_ticket_link btn fullwidth btn-primary">Ajouter un ticket</button>');
+var $newLinkLi = $('<span background-primary></span>').append($addTicketButton);
 
 $(document).ready(function() {
     console.log("coucou");
@@ -53,20 +53,21 @@ $(document).ready(function() {
     });
 });
 
-    function addTicketForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype explained earlier
-    var prototype = $collectionHolder.data('prototype');
+function addTicketForm($collectionHolder, $newLinkLi) {
+// Get the data-prototype explained earlier
+var prototype = $collectionHolder.data('prototype');
 
-    // get the new index
-    var index = $collectionHolder.data('index');
+// get the new index
+var index = $collectionHolder.data('index');
 
-    var newForm = prototype;
-   
-    newForm = newForm.replace(/__name__/g, index);
-    // increase the index with one for the next item
-    $collectionHolder.data('index', index + 1);
+var newForm = prototype;
 
-    // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<span class="bloc"></span>').append(newForm);
-    $newLinkLi.before($newFormLi);
+newForm = newForm.replace(/__name__/g, index);
+// increase the index with one for the next item
+$collectionHolder.data('index', index + 1);
+
+// Display the form in the page in an li, before the "Add a tag" link li
+var $newFormLi = $('<li class="box"></li>').append(newForm);
+$newLinkLi.before($newFormLi);
 }
+
