@@ -35,7 +35,7 @@ class TicketTypeManager
         return $type;
     }
 
-    public function calculatePrice($type){
+    public function calculatePrice($type){//switch
         if($type==0 or $type==5){
             return 0;
         }//switch 
@@ -63,7 +63,7 @@ class TicketTypeManager
     }
 
     public function nameType($type)
-    {
+    {//optimiser
         switch($type){
             case 0  :
                 return 'Aucun';

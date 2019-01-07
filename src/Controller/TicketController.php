@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
-use Flosch\Bundle\StripeBundle\Stripe\StripeClient;
+use App\Service\StripeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
-use App\Entity\Ticket;
 use App\Service\TicketTypeManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\ReservationRepository;
@@ -25,21 +24,21 @@ class TicketController extends AbstractController
         return $this->render('ticket/home.html.twig');
     }
 
-    
+
     /**
      * @Route("/reservation", name="reservation")
-     */    
+     */
     public function new(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager)
     {
         $reservation = new reservation();
         $originalTickets = new ArrayCollection();
-        
+
         $form = $this->createForm(ReservationFormType::class, $reservation);
         $form->handleRequest($request);
         foreach ($reservation->getTickets() as $ticket) {
             $originalTickets->add($ticket);
         }
-       
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($originalTickets as $ticket) {
@@ -51,14 +50,14 @@ class TicketController extends AbstractController
                 $ticket->setType($type);
                 $price = $ticketTypeManager -> calculatePrice($type);
                 $ticket->setPrice($price);
-                $manager->persist($ticket); 
-                $ticket->setReservation($reservation); 
+                $manager->persist($ticket);
+                $ticket->setReservation($reservation);
             }
-            $manager->persist($reservation);  
-            $manager->flush(); 
+            $manager->persist($reservation);
+            $manager->flush();
             return $this->redirectToRoute('recap', ['id' => $reservation->getId()]);
-            
-            
+
+
             // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
         return $this->render('ticket/ticket.html.twig', array(
@@ -75,16 +74,15 @@ class TicketController extends AbstractController
         $totalPrice=0;
         $amountOfTickets=0;
         $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
-        foreach($tickets as $ticket)
-        {
-        $typeName = $ticketTypeManager -> nameType($ticket->getType());
-        $totalPrice=$totalPrice + $ticket->getPrice();
-        $amountOfTickets++;
+        foreach($tickets as $ticket) {
+            $typeName = $ticketTypeManager -> nameType($ticket->getType());
+            $totalPrice=$totalPrice + $ticket->getPrice();
+            $amountOfTickets++;
         }
         return $this->render('ticket/recapitulatif.html.twig', array(
             'reservation'=>$reservation,
-            'typeName'=>$typeName, 
-            'dayOrHalfDay'=>$dayOrHalfDay, 
+            'typeName'=>$typeName,
+            'dayOrHalfDay'=>$dayOrHalfDay,
             'totalPrice'=>$totalPrice,
             'amountOfTickets' => $amountOfTickets )
         );
@@ -93,14 +91,14 @@ class TicketController extends AbstractController
     /**
      * @Route *("/paiement" , name="paiement")
      */
-    public function paiement(){
-        $this->container->get('flosch.stripe.client');
-    $charge = \Stripe\Charge::create([
-        'amount' => '1200',
-        'currency' => 'eur',
-        'source' => 'tok_visa',
-        'receipt_email' => 'jenny.rosen@example.com',
-    ]);
+    public function paiement(StripeManager $stripeManager)
+    {
+
+// Token is created using Checkout or Elements!
+// Get the payment token ID submitted by the form:
+
+
+        $charge= $stripeManager -> createCharge();
 
             return $this->render('ticket/confirmation.html.twig');
     }

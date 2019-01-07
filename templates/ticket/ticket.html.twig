@@ -8,15 +8,15 @@
 
     {# render the task's only field: description #}
 
-  
+
 
     {# render the task's only field: description #}
-<h3> Choisissez la date de votre visite </h3>
+
 
 {{ form_start(form) }}
     {{ form_row(form.reservationDate) }}
 
-    <h4>Tickets</h4>
+    <h1 class="text-primary">Ajouter des tickets</h1>
     <div class="bloc">
     Ticket 
     <div class="tickets  center" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html') }}">

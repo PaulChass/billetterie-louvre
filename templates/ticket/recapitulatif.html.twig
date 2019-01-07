@@ -37,18 +37,17 @@
         <h4> Prix total : {{totalPrice}}€</h4>   
     </div>    
     <div class="row justify-content-md-center"> 
-    <form action="/paiement" method="POST">
-    <script
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="pk_test_KK2i0mkrYlpFPfBlE2n6CYEL"
-        data-amount={{totalPrice*100}}
-        data-name="Carte de paiement"
-        data-description={{totalPrice}} €
-        {#data-image="https://stripe.com/img/documentation/checkout/marketplace.png"#}
-        data-locale="auto"
-        data-currency="eur">
-    </script>
-    </form> 
+        <form action="/paiement" method="POST"/>
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_KK2i0mkrYlpFPfBlE2n6CYEL"
+                data-amount={{totalPrice*100}}€
+                data-name="Carte de paiement"
+                data-description=Total:{{totalPrice}}€
+                {#data-image="https://stripe.com/img/documentation/checkout/marketplace.png"#}
+                data-locale="auto"
+                data-currency="eur"></script>
+        </form>
     </div>
 </div>
 {% endblock %}

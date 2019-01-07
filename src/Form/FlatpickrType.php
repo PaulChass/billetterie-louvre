@@ -15,7 +15,7 @@ class FlatpickrType extends AbstractType
             'widget' => 'single_text',
             'attr' => array(
                 'placeholder' => 'Choisissez la date de visite',
-                'class' => "flatpickr datetime",
+                'class' => "datetime",
             ),
         ));
     }
