@@ -6,6 +6,7 @@ use App\Service\StripeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
@@ -13,6 +14,7 @@ use App\Service\TicketTypeManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\ReservationRepository;
 use App\Repository\TicketRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends AbstractController
 {
@@ -28,7 +30,7 @@ class TicketController extends AbstractController
     /**
      * @Route("/reservation", name="reservation")
      */
-    public function new(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager)
+    public function new(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager, ValidatorInterface $validator)
     {
         $reservation = new reservation();
         $originalTickets = new ArrayCollection();
@@ -50,15 +52,24 @@ class TicketController extends AbstractController
                 $ticket->setType($type);
                 $price = $ticketTypeManager -> calculatePrice($type);
                 $ticket->setPrice($price);
+
+                $errors = $validator->validate($ticket);
+                if (count($errors) > 0) {
+                    /*
+                     * Uses a __toString method on the $errors variable which is a
+                     * ConstraintViolationList object. This gives us a nice string
+                     * for debugging.
+                     */
+                    $errorsString = (string) $errors;
+
+                    return new Response($errorsString);
+                }
                 $manager->persist($ticket);
                 $ticket->setReservation($reservation);
             }
             $manager->persist($reservation);
             $manager->flush();
             return $this->redirectToRoute('recap', ['id' => $reservation->getId()]);
-
-
-            // ... maybe do some form processing, like saving the Ticket and Reservation objects
         }
         return $this->render('ticket/ticket.html.twig', array(
             'form' => $form->createView(),
@@ -72,6 +83,7 @@ class TicketController extends AbstractController
         $reservation = $reservationRepository->find($id);
         $tickets = $ticketRepository->findByReservation($reservation);
         $totalPrice=0;
+        $typeName = 0;
         $amountOfTickets=0;
         $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
         foreach($tickets as $ticket) {
@@ -81,7 +93,7 @@ class TicketController extends AbstractController
         }
         return $this->render('ticket/recapitulatif.html.twig', array(
             'reservation'=>$reservation,
-            'typeName'=>$typeName,
+            'typeName'=> $typeName,
             'dayOrHalfDay'=>$dayOrHalfDay,
             'totalPrice'=>$totalPrice,
             'amountOfTickets' => $amountOfTickets )
@@ -93,13 +105,15 @@ class TicketController extends AbstractController
      */
     public function paiement(StripeManager $stripeManager)
     {
-
-// Token is created using Checkout or Elements!
-// Get the payment token ID submitted by the form:
-
-
-        $charge= $stripeManager -> createCharge();
-
-            return $this->render('ticket/confirmation.html.twig');
+        $customer = $stripeManager -> createCustomer();
+        $card = $stripeManager -> createCard($customer['id']);
+        $charge = $stripeManager -> createCharge();
+        if($charge['status'] != 'succeeded'){
+            $this->redirectToRoute('home');
+        }
+        return $this->render('ticket/confirmation.html.twig', array(
+            'card' => $card,
+            "charge" => $charge
+        ));
     }
 }

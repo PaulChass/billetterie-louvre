@@ -71,8 +71,6 @@ var $newFormLi = $('<li class="box"></li>').append(newForm);
 $newLinkLi.before($newFormLi);
 }
 
-
-//Stripe
 var stripe = Stripe('pk_test_KK2i0mkrYlpFPfBlE2n6CYEL');
 var elements = stripe.elements();
 
