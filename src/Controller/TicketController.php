@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Service\StripeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -12,9 +11,11 @@ use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Service\TicketTypeManager;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Repository\ReservationRepository;
 use App\Repository\TicketRepository;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Service\MailManager;
 
 class TicketController extends AbstractController
 {
@@ -42,7 +43,8 @@ class TicketController extends AbstractController
         }
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             foreach ($originalTickets as $ticket) {
                 $type = $ticketTypeManager -> calculateType(
                     $ticket->getType(),
@@ -50,7 +52,7 @@ class TicketController extends AbstractController
                     $reservation->getReservationDate()
                 );
                 $ticket->setType($type);
-                $price = $ticketTypeManager -> calculatePrice($type);
+                $price = $ticketTypeManager -> guessPrice($type);
                 $ticket->setPrice($price);
 
                 $errors = $validator->validate($ticket);
@@ -60,10 +62,11 @@ class TicketController extends AbstractController
                      * ConstraintViolationList object. This gives us a nice string
                      * for debugging.
                      */
-                    $errorsString = (string) $errors;
+                    $errorsString = (string)$errors;
 
                     return new Response($errorsString);
                 }
+
                 $manager->persist($ticket);
                 $ticket->setReservation($reservation);
             }
@@ -78,19 +81,19 @@ class TicketController extends AbstractController
 
     /**
      * @Route("/recap/{id}", name="recap")
+     * @ParamConverter("reservation")
      */
-    public function recap($id, ReservationRepository $reservationRepository, TicketRepository $ticketRepository, TicketTypeManager $ticketTypeManager) {
-        $reservation = $reservationRepository->find($id);
+    public function recap( Reservation $reservation, TicketRepository $ticketRepository, TicketTypeManager $ticketTypeManager) {
         $tickets = $ticketRepository->findByReservation($reservation);
-        $totalPrice=0;
-        $typeName = 0;
         $amountOfTickets=0;
+        $typeName = 0;
+
         $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
         foreach($tickets as $ticket) {
             $typeName = $ticketTypeManager -> nameType($ticket->getType());
-            $totalPrice=$totalPrice + $ticket->getPrice();
             $amountOfTickets++;
         }
+        $totalPrice = $ticketTypeManager -> calculatePrice($reservation, $ticketRepository);
         return $this->render('ticket/recapitulatif.html.twig', array(
             'reservation'=>$reservation,
             'typeName'=> $typeName,
@@ -101,19 +104,50 @@ class TicketController extends AbstractController
     }
 
     /**
-     * @Route *("/paiement" , name="paiement")
+     * @Route *("/paiement/{id}" , name="paiement")
+     * @ParamConverter("reservation")
      */
-    public function paiement(StripeManager $stripeManager)
+    public function paiement(StripeManager $stripeManager ,Reservation $reservation, TicketTypeManager $ticketTypeManager, TicketRepository $ticketRepository, ObjectManager $manager )
     {
-        $customer = $stripeManager -> createCustomer();
-        $card = $stripeManager -> createCard($customer['id']);
-        $charge = $stripeManager -> createCharge();
-        if($charge['status'] != 'succeeded'){
-            $this->redirectToRoute('home');
-        }
-        return $this->render('ticket/confirmation.html.twig', array(
-            'card' => $card,
-            "charge" => $charge
-        ));
+        $charge = $stripeManager -> stripePayment($reservation, $ticketTypeManager, $ticketRepository);
+        if($charge['paid'] != true){
+        dump($charge);}
+        $reservation->setIsPaid('true');
+        $manager->flush(); 
+        return $this->redirectToRoute('registration', ['id' => $reservation->getId()]);
+
+    }
+
+    /**
+     * @Route *("/registration/{id}" , name="registration")
+     * @ParamConverter("reservation")
+     */
+    public function registration(Reservation $reservation, \Swift_Mailer $mailer)
+    {
+        $emailaddress = $reservation->getEmailAddress();
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('send@example.com')
+            ->setTo('recipient@example.com')
+            ->setBody(
+                $this->render(
+                    'ticket/registration.html.twig'
+                ),
+                'text/html'
+            )
+            /*
+             * If you also want to include a plaintext version of the message
+            ->addPart(
+                $this->renderView(
+                    'emails/registration.txt.twig',
+                    ['name' => $name]
+                ),
+                'text/plain'
+            )
+            */
+        ;
+
+        $mailer->send($message);
+
+        return $this->render('registration.html.twig');
     }
 }

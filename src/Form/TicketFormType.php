@@ -42,14 +42,6 @@ class TicketFormType extends AbstractType
                 'placeholder' => 'France',
                 'label'=>'Pays'
             ])
-            
-            ->add('emailAddress', EmailType::class, [
-                'attr'=> [
-                'placeholder' => 'exemple@mail.com',
-                'autocomplete' => 'on'
-                ],
-                'label' => 'Adresse mail'
-            ])
                 
             ->add('type',CheckboxType::class,[
                 'required'=>false,

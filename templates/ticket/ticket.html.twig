@@ -4,7 +4,7 @@
 {% block body %}
 
 
-    <h1 class="text-primary">Choisissez la date de votre visite </h1>
+    <h1 class="text-primary"> Réservez maintenant ! </h1>
 
     {# render the task's only field: description #}
 
@@ -13,20 +13,21 @@
     {# render the task's only field: description #}
 
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
     {{ form_row(form.reservationDate) }}
+    {{ form_row(form.emailAddress) }}
 
     <h1 class="text-primary">Ajouter des tickets</h1>
     <div class="bloc">
-    Ticket 
-    <div class="tickets  center" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html') }}">
+        Ticket
+        <div class="tickets  center" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html') }}">
+        </div>
+
     </div>
-    
-   </div>
-   <div class="row justify-content-md-center">
-    <button class="btn btn-success" type="submit"> Envoyer </submit>
+    <div class="row justify-content-md-center">
+        <button class="btn btn-success" type="submit"> Envoyer</button>
     </div>
     {{ form_row(form._token) }}
-{{ form_end(form.reservationDate) }}
+    {{ form_end(form.reservationDate) }}
 
 {% endblock %}

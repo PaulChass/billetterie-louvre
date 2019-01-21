@@ -41,6 +41,12 @@ class Reservation
      */
     private $tickets;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $emailAddress;
+
+
 
     public function __construct()
     {   
@@ -124,6 +130,18 @@ class Reservation
                 $ticket->setReservationId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
+
+    public function setEmailAddress(string $emailAddress): self
+    {
+        $this->emailAddress = $emailAddress;
 
         return $this;
     }

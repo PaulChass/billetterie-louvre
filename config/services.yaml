@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    stripe_api_key: 'pk_test_KK2i0mkrYlpFPfBlE2n6CYEL'
+    stripe_api_key: 'pk_test_ziyUuaANARUPF16NXUpZ8Uca'
   
 
 

@@ -40,11 +40,6 @@ class Ticket
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $emailAddress;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $type;
@@ -105,19 +100,6 @@ class Ticket
 
         return $this;
     }
-
-    public function getEmailAddress(): ?string
-    {
-        return $this->emailAddress;
-    }
-
-    public function setEmailAddress(?string $emailAddress): self
-    {
-        $this->emailAddress = $emailAddress;
-
-        return $this;
-    }
-
     public function getType(): ?int
     {
         return $this->type;

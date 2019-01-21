@@ -24,7 +24,7 @@
     <div class="container col-12 col-md-8  ">
         {% block body %}{% endblock %}
     </div>
-    <footer class="box"> FOOTER </footer>
+    <footer class="box"> FOOTER <a href="{{ path('home')  }}"> Page d'accueil </a></footer>
     </body>
    {% block javascripts %}
             {{ encore_entry_script_tags('app') }}

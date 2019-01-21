@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use App\Entity\Ticket;
+use App\Repository\TicketRepository;
 
 class TicketTypeManager
 {
@@ -35,23 +36,51 @@ class TicketTypeManager
         return $type;
     }
 
-    public function calculatePrice($type){//switch
-        if($type==0 or $type==5){
-            return 0;
-        }//switch 
-        if($type==1 OR $type==6){
-            return 8;
-        }
-        if($type==2 or $type==7){
-            return 15;
-        }
-        if($type==3 or $type==8){
-            return 12;
-        }
-        if($type==4 or $type==9)
+    public function guessPrice($type)
+    {
+        switch($type)
         {
-            return 10;
+            case 0  :
+                return 0;
+                break;
+            case 1  :
+                return 8;
+                break;
+            case 2 :
+                return 16;
+                break ;
+            case 3  :
+                return 12;
+                break;
+            case 4 :
+                return 10;
+                break;
+            case 5  :
+                return 0;
+                break;
+            case 6  :
+                return 4;
+                break;
+            case 7 :
+                return 8;
+                break ;
+            case 8  :
+                return 6;
+                break;
+            case 9 :
+                return 5;
+                break;
         }
+    }
+
+    public function calculatePrice($reservation, TicketRepository $ticketRepository){
+        $totalPrice=0;
+        $tickets = $ticketRepository->findByReservation($reservation);
+        foreach($tickets as $ticket) {
+            $totalPrice=$totalPrice + $ticket->getPrice();
+        }
+        return $totalPrice;
+
     }
 
     public function dayOrHalfDay($reservationDate)
@@ -62,8 +91,10 @@ class TicketTypeManager
         return "Journée complète";
     }
 
+
+
     public function nameType($type)
-    {//optimiser
+    {
         switch($type){
             case 0  :
                 return 'Aucun';

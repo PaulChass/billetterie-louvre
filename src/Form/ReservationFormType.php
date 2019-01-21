@@ -3,13 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Reservation;
-use App\Entity\Ticket;
-use App\Form\TicketFormType;
-use App\Form\FlatpickrType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ReservationFormType extends AbstractType
@@ -17,7 +15,15 @@ class ReservationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('emailAddress', EmailType::class, [
+                'attr'=> [
+                    'placeholder' => 'exemple@mail.com',
+                    'autocomplete' => 'on'
+                ],
+                'label' => 'Adresse mail'
+            ])
             ->add('reservationDate', FlatpickrType::class , ['label'=>'Date et heure de la visite'] )
+
             ->add('Recap & Paiement', SubmitType::class)
         ;
 
