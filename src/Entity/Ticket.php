@@ -24,7 +24,7 @@ class Ticket
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotEqualTo("Mary")
+     *
      */
 
     private $firstName;
@@ -52,6 +52,7 @@ class Ticket
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Reservation", inversedBy="Tickets")
      * @ORM\JoinColumn(nullable=false)
+     *
      */
     private $reservation;
 

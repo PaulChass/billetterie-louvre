@@ -2,5 +2,10 @@
 {% block title %}Hello      {% endblock %}
 
 {% block body %}
-{{ email }}
+    <h1>Votre commmande a bien été enregistrée</h1>
+    <div class="bloc">
+        <h4> Un email de confirmation contenant le(s) billet(s) pour le musée va être  envoyé sur l'addresse {{ mail }}  </h4>
+        
+    </div>
+<p>Un email va être envoyé à {{ mail }}</p>
 {% endblock %}

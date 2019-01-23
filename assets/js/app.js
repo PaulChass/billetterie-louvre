@@ -10,7 +10,8 @@ require('../css/app.css');
 
 // Flatpickr
 const flatpickr = require("flatpickr");
-flatpickr('#reservation_form_reservationDate', { 
+flatpickr('#reservation_form_reservationDate', {
+    allowInput: true,
     enableTime: true,
     dateFormat: "Y-m-d H:i",
     minDate: "today",

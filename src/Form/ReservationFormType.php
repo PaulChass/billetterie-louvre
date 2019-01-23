@@ -18,11 +18,12 @@ class ReservationFormType extends AbstractType
             ->add('emailAddress', EmailType::class, [
                 'attr'=> [
                     'placeholder' => 'exemple@mail.com',
-                    'autocomplete' => 'on'
+                    'autocomplete' => 'on',
                 ],
                 'label' => 'Adresse mail'
             ])
-            ->add('reservationDate', FlatpickrType::class , ['label'=>'Date et heure de la visite'] )
+            ->add('reservationDate', FlatpickrType::class ,
+                ['label'=>'Date et heure de la visite'], ['required'=>"true"] )
 
             ->add('Recap & Paiement', SubmitType::class)
         ;

@@ -18,7 +18,8 @@
   "homepage": "https://github.com/PaulChass/billetterie-louvre#readme",
   "dependencies": {
     "flatpickr": "^4.5.2",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "maildev": "^1.0.0-rc3"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.22.1",

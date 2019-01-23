@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
@@ -22,12 +23,14 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\Column(type="datetime" ,nullable= true)
+     * @ORM\Column(type="datetime")
+     * @Assert\NotNull
      */
     private $reservationDate;
 
     /**
      * @ORM\Column(type="datetime")
+     *
      */
     private $createdAt;
 
@@ -38,11 +41,14 @@ class Reservation
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="reservation", orphanRemoval=true, cascade={"persist"})
+     * @Assert\NotNull()
+     *
      */
     private $tickets;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotEqualTo("a@a.a")
      */
     private $emailAddress;
 

@@ -15,7 +15,6 @@ use App\Repository\TicketRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use App\Service\MailManager;
 
 class TicketController extends AbstractController
 {
@@ -36,6 +35,8 @@ class TicketController extends AbstractController
         $reservation = new reservation();
         $originalTickets = new ArrayCollection();
 
+
+        // $allTicketsSole { show message }
         $form = $this->createForm(ReservationFormType::class, $reservation);
         $form->handleRequest($request);
         foreach ($reservation->getTickets() as $ticket) {
@@ -72,6 +73,7 @@ class TicketController extends AbstractController
             }
             $manager->persist($reservation);
             $manager->flush();
+            if($originalTickets->isEmpty()== false)
             return $this->redirectToRoute('recap', ['id' => $reservation->getId()]);
         }
         return $this->render('ticket/ticket.html.twig', array(
@@ -113,7 +115,7 @@ class TicketController extends AbstractController
         if($charge['paid'] != true){
         dump($charge);}
         $reservation->setIsPaid('true');
-        $manager->flush(); 
+        $manager->flush();
         return $this->redirectToRoute('registration', ['id' => $reservation->getId()]);
 
     }
@@ -124,13 +126,13 @@ class TicketController extends AbstractController
      */
     public function registration(Reservation $reservation, \Swift_Mailer $mailer)
     {
-        $emailaddress = $reservation->getEmailAddress();
-        $message = (new \Swift_Message('Hello Email'))
+        $mail = $reservation->getEmailAddress();
+        $message = (new \Swift_Message('Billet pour le Musée du Louvre'))
             ->setFrom('send@example.com')
-            ->setTo('recipient@example.com')
+            ->setTo($mail)
             ->setBody(
-                $this->render(
-                    'ticket/registration.html.twig'
+                $this->renderView(
+                    'ticket/registration.html.twig',['name'=>$mail]
                 ),
                 'text/html'
             )
@@ -145,9 +147,7 @@ class TicketController extends AbstractController
             )
             */
         ;
-
-        $mailer->send($message);
-
-        return $this->render('registration.html.twig');
+        $mailer -> send($message);
+        return $this->render('ticket/confirmation.html.twig',['mail'=>$mail]);
     }
 }
