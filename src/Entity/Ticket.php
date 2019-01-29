@@ -50,7 +50,7 @@ class Ticket
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Reservation", inversedBy="Tickets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Reservation", inversedBy="tickets")
      * @ORM\JoinColumn(nullable=false)
      *
      */

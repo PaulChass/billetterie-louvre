@@ -22,10 +22,15 @@ class ReservationFormType extends AbstractType
                 ],
                 'label' => 'Adresse mail'
             ])
-            ->add('reservationDate', FlatpickrType::class ,
-                ['label'=>'Date et heure de la visite'], ['required'=>"true"] )
-
-            ->add('Recap & Paiement', SubmitType::class)
+            ->add('reservationDate', FlatpickrType::class ,[
+                'attr'=> [
+                    'placeholder'=>'Date et heure de visite',
+                    'required'=>"true",
+                    'autocomplete'=>'on'
+                ],
+            'label'=>'Date et heure de la visite'
+            ])
+            ->add('Récapitulatif & Paiement', SubmitType::class)
         ;
 
         $builder->add('tickets', CollectionType::class, array(

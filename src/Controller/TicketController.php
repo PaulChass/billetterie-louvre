@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ReservationRepository;
 use App\Service\StripeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,10 @@ class TicketController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function homePage()
+    public function homePage(ReservationRepository $reservationRepository)
     {
+        $soldTickets= $reservationRepository->countSoldTickets();
+        echo $soldTickets['totalSoldTickets'];
         return $this->render('ticket/home.html.twig');
     }
 
@@ -111,9 +114,10 @@ class TicketController extends AbstractController
      */
     public function paiement(StripeManager $stripeManager ,Reservation $reservation, TicketTypeManager $ticketTypeManager, TicketRepository $ticketRepository, ObjectManager $manager )
     {
-        $charge = $stripeManager -> stripePayment($reservation, $ticketTypeManager, $ticketRepository);
-        if($charge['paid'] != true){
-        dump($charge);}
+        $isPaid = $stripeManager -> stripePayment($reservation, $ticketTypeManager, $ticketRepository);
+        if($isPaid != true){
+        //Message d'erreur flash//
+        }
         $reservation->setIsPaid('true');
         $manager->flush();
         return $this->redirectToRoute('registration', ['id' => $reservation->getId()]);
@@ -124,15 +128,29 @@ class TicketController extends AbstractController
      * @Route *("/registration/{id}" , name="registration")
      * @ParamConverter("reservation")
      */
-    public function registration(Reservation $reservation, \Swift_Mailer $mailer)
+    public function registration(Reservation $reservation, \Swift_Mailer $mailer, TicketRepository $ticketRepository, TicketTypeManager $ticketTypeManager)
     {
         $mail = $reservation->getEmailAddress();
+        $tickets = $ticketRepository->findByReservation($reservation);
+        $amountOfTickets=0;
+        $typeName = 0;
+
+        $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
+        foreach($tickets as $ticket) {
+            $typeName = $ticketTypeManager -> nameType($ticket->getType());
+            $amountOfTickets++;
+        }
+        //sendmail()
         $message = (new \Swift_Message('Billet pour le Musée du Louvre'))
             ->setFrom('send@example.com')
             ->setTo($mail)
             ->setBody(
                 $this->renderView(
-                    'ticket/registration.html.twig',['name'=>$mail]
+                    'ticket/registration.html.twig',['name'=>$mail,
+                        'reservation'=>$reservation,
+                        'typeName'=> $typeName,
+                        'dayOrHalfDay'=>$dayOrHalfDay,
+                        'amountOfTickets' => $amountOfTickets]
                 ),
                 'text/html'
             )
@@ -150,4 +168,6 @@ class TicketController extends AbstractController
         $mailer -> send($message);
         return $this->render('ticket/confirmation.html.twig',['mail'=>$mail]);
     }
+
+ //   public function sendMail()
 }

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
-{% block title %}Hello      {% endblock %}
+
 
 {% block body %}
-    <h1>Votre commmande a bien été enregistrée</h1>
+
+    <h2>Votre commmande a bien été enregistrée</h2>
     <div class="bloc">
         <h4> Un email de confirmation contenant le(s) billet(s) pour le musée va être  envoyé sur l'addresse {{ mail }}  </h4>
-        
+        <p>Un email va être envoyé à {{ mail }}</p>
     </div>
-<p>Un email va être envoyé à {{ mail }}</p>
 {% endblock %}

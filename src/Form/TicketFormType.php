@@ -20,7 +20,7 @@ class TicketFormType extends AbstractType
         $builder
             ->add('firstName',TextType::class,[
                 'attr'=> [
-                    'placeholder'=>'Votre Prénom',
+                    'placeholder'=>'Prénom',
                     'autocomplete' => 'on'
                 ], 'label'=>'Prénom'
             ])
@@ -36,10 +36,12 @@ class TicketFormType extends AbstractType
                 'widget' => 'choice',
                 'label'=>'Date de naissance',
                 'format' => 'dd-MM-yyyy',
+                'placeholder'=>'',
+                'required'=>'true'
             ])
 
             ->add('country', CountryType::class, [
-                'placeholder' => 'France',
+                'placeholder' => 'Pays',
                 'label'=>'Pays'
             ])
                 

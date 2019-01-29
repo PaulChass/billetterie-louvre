@@ -19,6 +19,16 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+    public function countSoldTickets(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT COUNT(*) AS totalSoldTickets FROM reservation RIGHT JOIN ticket on reservation.id=ticket.reservation_id WHERE DATE(created_at) = DATE(NOW()) AND is_Paid=TRUE';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     // /**
     //  * @return Reservation[] Returns an array of Reservation objects
     //  */

@@ -15,8 +15,8 @@
       list-style-type:none;
 
     }
-
-   
+.footer{margin-top: 5rem;margin-bottom:0px;background-color:rgba(10,10,10,0.3); color:white;padding-top:2rem;padding-bottom:2rem;}
+.footer a{color:white;}
     #blocImage p {
       width: 100%;
       margin : auto;
@@ -34,12 +34,10 @@
     .small{size:0.7rem;font-style:italic;}
 
     .bloc {
-      background-color:rgb(255,255,255,0.5); 
-      
+      background-color:rgba(255,255,255,0.5);
       border-radius:5px;margin:5%;padding: 2%;
     }
     .fullwidth{background-color:grey;}
-
 
 
 

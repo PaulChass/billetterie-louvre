@@ -4,7 +4,6 @@
 {% block body %}
     <h1> Recapitulatif de la commande </h1>
     <h3> Visite le {{ reservation.reservationDate|date('d/m/Y') }} </h3>
-    </h2>
     <div class="bloc">
         {% for ticket in reservation.tickets %}
 

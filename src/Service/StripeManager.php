@@ -25,7 +25,7 @@ class StripeManager
                 "source" => 'tok_mastercard', // obtained with Stripe.js
                 "description" => $email
             ]);
-            return $charge;
+            return $charge['paid'];
         } catch (\Stripe\Error\Card $e) {
              // Since it's a decline, \Stripe\Error\Card will be caught
              $body = $e->getJsonBody();
