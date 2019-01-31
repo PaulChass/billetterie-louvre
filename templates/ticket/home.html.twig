@@ -3,7 +3,7 @@
 {% block title %}Hello {% endblock %}
 
 {% block body %}
-    <h1 class="text-primary"> Commandez votre billet pour le musée du Louvre ! </h1>
+    <h1 class="text-primary"> Bienvenue sur la billetterie du musée du Louvre ! </h1>
     <section>
         <div class="p-3">
             <h3> Horaires d'ouverture :</h3>
@@ -83,10 +83,15 @@
                 </div>
             </div>
     </section>
+    {% if limitReached == false %}
     <div class="row justify-content-center p-3">
         <a href={{ path('reservation') }}>
             <button class="btn btn-lg btn-primary"> Je commande</button>
         </a>
 
     </div>
+
+    {% else %}
+    <p class="row justify-content-center p-3 alert-info">Le nombre maximum de billets vendus aujourd'hui à été atteint. Veuillez nous excuser pour la gêne occiasionée </p>
+    {% endif %}
 {% endblock %}

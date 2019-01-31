@@ -30,7 +30,8 @@ class TicketTypeManager
         else{$type = Ticket::REDUCED;}
         
 
-        if($reservationDate->format('H')>14){
+        if($reservationDate->format('H')>=14 )
+        {
             $type= $type + 5;
         }
         return $type;

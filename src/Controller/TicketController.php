@@ -14,7 +14,8 @@ use App\Service\TicketTypeManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\TicketRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class TicketController extends AbstractController
@@ -25,28 +26,25 @@ class TicketController extends AbstractController
     public function homePage(ReservationRepository $reservationRepository)
     {
         $soldTickets= $reservationRepository->countSoldTickets();
-        echo $soldTickets['totalSoldTickets'];
-        return $this->render('ticket/home.html.twig');
+        $limit= 1000;
+        $soldTickets=$soldTickets['totalSoldTickets'];
+        $limitReached= $soldTickets > $limit;
+        return $this->render('ticket/home.html.twig',['limitReached'=>$limitReached]);
     }
 
 
     /**
      * @Route("/reservation", name="reservation")
      */
-    public function new(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager, ValidatorInterface $validator)
+    public function booking(Request $request, ObjectManager $manager, TicketTypeManager $ticketTypeManager, ValidatorInterface $validator)
     {
         $reservation = new reservation();
         $originalTickets = new ArrayCollection();
-
-
-        // $allTicketsSole { show message }
         $form = $this->createForm(ReservationFormType::class, $reservation);
         $form->handleRequest($request);
         foreach ($reservation->getTickets() as $ticket) {
             $originalTickets->add($ticket);
         }
-
-
         if ($form->isSubmitted() && $form->isValid())
         {
             foreach ($originalTickets as $ticket) {
@@ -61,16 +59,9 @@ class TicketController extends AbstractController
 
                 $errors = $validator->validate($ticket);
                 if (count($errors) > 0) {
-                    /*
-                     * Uses a __toString method on the $errors variable which is a
-                     * ConstraintViolationList object. This gives us a nice string
-                     * for debugging.
-                     */
                     $errorsString = (string)$errors;
-
                     return new Response($errorsString);
                 }
-
                 $manager->persist($ticket);
                 $ticket->setReservation($reservation);
             }
@@ -91,17 +82,17 @@ class TicketController extends AbstractController
     public function recap( Reservation $reservation, TicketRepository $ticketRepository, TicketTypeManager $ticketTypeManager) {
         $tickets = $ticketRepository->findByReservation($reservation);
         $amountOfTickets=0;
-        $typeName = 0;
 
         $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
         foreach($tickets as $ticket) {
-            $typeName = $ticketTypeManager -> nameType($ticket->getType());
+            $typeName = $ticketTypeManager->nameType($ticket->getType());
             $amountOfTickets++;
+            $tarifs[] = $typeName;
         }
         $totalPrice = $ticketTypeManager -> calculatePrice($reservation, $ticketRepository);
         return $this->render('ticket/recapitulatif.html.twig', array(
             'reservation'=>$reservation,
-            'typeName'=> $typeName,
+            'typeName'=> $tarifs,
             'dayOrHalfDay'=>$dayOrHalfDay,
             'totalPrice'=>$totalPrice,
             'amountOfTickets' => $amountOfTickets )
@@ -116,7 +107,12 @@ class TicketController extends AbstractController
     {
         $isPaid = $stripeManager -> stripePayment($reservation, $ticketTypeManager, $ticketRepository);
         if($isPaid != true){
-        //Message d'erreur flash//
+            $this->addFlash(
+                'notice',
+                'Une erreur est survenu lors du paiement... Veuillez réeessayer'
+            );
+
+            return $this->redirectToRoute('recap', ['id' => $reservation]);
         }
         $reservation->setIsPaid('true');
         $manager->flush();
@@ -133,14 +129,13 @@ class TicketController extends AbstractController
         $mail = $reservation->getEmailAddress();
         $tickets = $ticketRepository->findByReservation($reservation);
         $amountOfTickets=0;
-        $typeName = 0;
 
         $dayOrHalfDay =  $ticketTypeManager -> dayOrHalfDay($reservation -> getReservationDate());
         foreach($tickets as $ticket) {
             $typeName = $ticketTypeManager -> nameType($ticket->getType());
             $amountOfTickets++;
+            $tarifs[] = $typeName;
         }
-        //sendmail()
         $message = (new \Swift_Message('Billet pour le Musée du Louvre'))
             ->setFrom('send@example.com')
             ->setTo($mail)
@@ -148,7 +143,7 @@ class TicketController extends AbstractController
                 $this->renderView(
                     'ticket/registration.html.twig',['name'=>$mail,
                         'reservation'=>$reservation,
-                        'typeName'=> $typeName,
+                        'typeName'=> $tarifs,
                         'dayOrHalfDay'=>$dayOrHalfDay,
                         'amountOfTickets' => $amountOfTickets]
                 ),
@@ -167,6 +162,20 @@ class TicketController extends AbstractController
         ;
         $mailer -> send($message);
         return $this->render('ticket/confirmation.html.twig',['mail'=>$mail]);
+    }
+
+
+    public function logs(LoggerInterface $logger)
+    {
+        $logger->info('I just got the logger');
+        $logger->error('An error occurred');
+
+        $logger->critical('Critical message', [
+            // include extra "context" info in your logs
+            'cause' => 'in_hurry',
+        ]);
+
+        // ...
     }
 
  //   public function sendMail()
