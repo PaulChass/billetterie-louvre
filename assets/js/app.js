@@ -16,6 +16,7 @@ flatpickr('#reservation_form_reservationDate', {
     dateFormat: "Y-m-d H:i",
     minDate: "today",
     "disable": [
+        "2019-05-05","2019","2019-12-25","2020  -01-01",
         function(date) {
             // return true to disable
             return (date.getDay() === 2 || date.getDay() === 7);

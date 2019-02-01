@@ -9,7 +9,7 @@ class StripeManager
     public function stripePayment($reservation, TicketTypeManager $ticketTypeManager, TicketRepository $ticketRepository)
     {
         try {
-
+            \Stripe\Stripe::setApiKey("sk_test_zHkVE8A6tIqTx8AmqNSnTo6d");
             $amount = $ticketTypeManager->calculatePrice($reservation, $ticketRepository);
             $email = $reservation->getEmailAddress();
             $customer = \Stripe\Customer::create([

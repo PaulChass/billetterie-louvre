@@ -115,11 +115,6 @@ class Reservation
         $ticket->setReservation($this);
         $this->tickets->add($ticket);
     }
-
-    public function removeTag(Tag $tag)
-    {
-        // ...
-    }
     
     public function __toString()
     {
